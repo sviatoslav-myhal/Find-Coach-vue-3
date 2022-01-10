@@ -1,5 +1,5 @@
 <template>
-  <span class="border-0 bg-gray-900 p-2 rounded-md text-white text-md font-medium">
+  <span class="border-0 bg-gray-900 p-2 rounded-md text-white text-md font-medium hover:shadow-2xl">
     {{ title }}
   </span>
 </template>

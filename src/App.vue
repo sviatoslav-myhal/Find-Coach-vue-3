@@ -1,11 +1,11 @@
 <template>
   <Header></Header>
-  <router-view v-slot="slot">
-    <transition name="pages">
-      <component :is="slot.Component">
-      </component>
-    </transition>
-  </router-view>
+    <router-view v-slot="slot">
+      <transition name="pages">
+        <component :is="slot.Component">
+        </component>
+      </transition>
+    </router-view>
 </template>
 
 <script>

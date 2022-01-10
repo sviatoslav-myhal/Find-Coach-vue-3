@@ -1,10 +1,10 @@
 import axios from 'axios';
 
-const SIGNUP_URL = 'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyCEiedkv66qenYseLRiFkEIO7suz5grUlY';
-const SIGNIN_URL = 'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyCEiedkv66qenYseLRiFkEIO7suz5grUlY';
+const signUp_url = 'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyCEiedkv66qenYseLRiFkEIO7suz5grUlY';
+const signIn_url = 'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyCEiedkv66qenYseLRiFkEIO7suz5grUlY';
 
 export const setSignIn = async (user, mode) => {
-  const url = mode === 'login' ? SIGNIN_URL : SIGNUP_URL;
+  const url = mode === 'login' ? signIn_url : signUp_url;
   const response = await axios.post(url, user);
 
   try {

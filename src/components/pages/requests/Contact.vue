@@ -11,7 +11,7 @@
         Email
       </label>
       <input
-        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="email"
+        class="shadow appearance-none border-2 border-green-600 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="email"
         type="email"
         v-model="email"
         :class="handleStylesErrorEmail"
@@ -32,7 +32,7 @@
         Message
       </label>
       <textarea
-        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="message"
+        class="shadow appearance-none border-2 border-green-600 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="message"
         type="text"
         v-model="message"
         :class="handleStylesErrorMessage"

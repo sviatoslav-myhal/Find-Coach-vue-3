@@ -1,6 +1,6 @@
 <template>
   <li>
-    <div class="flex justify-center items-center mb-5 mx-10">
+    <div class="flex justify-center items-center mb-5 mx-10 hover:shadow-2xl">
       <div class=" transition-colors w-full sm:w-screen max-w-xl bg-gray-800 border-0 p-6 rounded-md tracking-wide shadow-lg hover:bg-gray-700">
         <div id="header" class="flex items-center mb-4">
           <div class="leading-6 ml-6">

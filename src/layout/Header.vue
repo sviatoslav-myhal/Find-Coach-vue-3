@@ -4,7 +4,7 @@
       <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex items-center justify-between h-20">
           <div class="flex items-center">
-            <div class="flex-shrink-0 font-extrabold text-2xl text-blue-50">
+            <div class="flex-shrink-0 font-extrabold text-2xl text-blue-50 border-4 border-green-600 p-2">
               <router-link to="/coaches">
                 &#9993; Coach Finder</router-link>
             </div>

@@ -45,7 +45,7 @@
       </div>
     </transition>
     <div class="flex flex-col gap-3  items-center m-5" v-show="isLoading">
-      <el-loading></el-loading>
+      <ElLoading></ElLoading>
       <p class="text-green-500 font-semibold text-lg">Authenticaticating</p>
     </div>
     <form
@@ -60,7 +60,7 @@
           Email
         </label>
         <input
-          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="email"
+          class="shadow appearance-none border-2 border-green-600 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="email"
           type="email"
           v-model.trim="email"
           @blur="handleValidity('email')"
@@ -80,7 +80,7 @@
           Password
         </label>
         <input
-          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="password"
+          class="shadow appearance-none border-2 border-green-600 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="password"
           type="password"
           v-model.trim="password"
           @blur="handleValidity('password')"
@@ -140,19 +140,19 @@ export default {
       if (!this.email || !this.email.includes('@') || this.password.length < 6) {
         return;
       }
-      const authData = {
+      const payloadData = {
         email: this.email,
         password: this.password,
       };
       this.isLoading = true;
       try {
         if (this.mode === 'login') {
-          await this.$store.dispatch('login', authData);
+          await this.$store.dispatch('login', payloadData);
         } else {
-          await this.$store.dispatch('signup', authData)
+          await this.$store.dispatch('signup', payloadData)
         }
       } catch (error) {
-        this.error = error.message || 'Failed to authtorize, try again later';
+        this.error = error.message || 'Failed to authorize, try again later';
       }
 
       this.isLoading = false;
@@ -163,7 +163,7 @@ export default {
         password: false,
       }
       if (!this.error) {
-        this.$router.push('/coaches');
+        await this.$router.push('/coaches');
       }
     },
     switchMode() {
