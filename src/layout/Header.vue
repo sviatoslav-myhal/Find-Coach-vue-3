@@ -5,7 +5,8 @@
         <div class="flex items-center justify-between h-20">
           <div class="flex items-center">
             <div class="flex-shrink-0 font-extrabold text-2xl text-blue-50">
-              <router-link to="/coaches">&#8981; Coach Finder</router-link>
+              <router-link to="/coaches">
+                &#9993; Coach Finder</router-link>
             </div>
             <div class="ml-3 sm:ml-10 flex items-baseline space-x-2 sm:space-x-8" >
               <router-link

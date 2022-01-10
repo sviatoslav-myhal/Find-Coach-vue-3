@@ -110,7 +110,7 @@
               @blur="handleValidity('areas')"
             >
             <label
-              class="text-purple-400 text-sm font-semibold mb-2 p-1"
+              class="text-green-400 text-sm font-semibold mb-2 p-1"
               for="frontend"
             >
               Frontend
