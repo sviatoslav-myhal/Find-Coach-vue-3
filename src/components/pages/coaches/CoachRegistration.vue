@@ -1,13 +1,15 @@
 <template>
-  <div>
-    $END$
-  </div>
+  <section class="text-center">
+    <CoachForm></CoachForm>
+  </section>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
+<script>
+import CoachForm from '@/components/coaches/CoachForm'
 
-export default defineComponent({
-  name: 'CoachRegistration',
-})
+export default {
+  components: {
+    CoachForm,
+  }
+}
 </script>

@@ -1,166 +1,81 @@
 <template>
-  <div>
-    <section>
+  <section class="mx-5 sm:mx-14">
+    <BaseCard>
       <CoachFilter @change-filter="setFilters"></CoachFilter>
-    </section>
-    <section>
-      <base-card>
-        <div class="controls">
-          <base-button mode="outline" @click="loadCoaches(true)">Refresh</base-button>
-          <base-button link to="/auth?redirect=register" v-if="!isLoggedIn">Login to Register as a Coach</base-button>
-          <base-button v-if="isLoggedIn && !isCoach && !isLoading" link to="/register">Register As Coach</base-button>
-        </div>
-        <ul v-if="hasCoaches">
-          <Coach
-              v-for="coach in filteredCoaches"
-              :key="coach.id"
-              :id="coach.id"
-              :first-name="coach.firstName"
-              :last-name="coach.lastName"
-              :rate="coach.hourlyRate"
-              :areas="coach.areas"
-          ></Coach>
-        </ul>
-        <h3 v-else>No coaches found...</h3>
-      </base-card>
-    </section>
-  </div>
+      <div class="flex flex-col sm:flex-row items-center justify-around my-4 gap-5 w-2/3 m-auto">
+        <BaseButton @click="loadCoaches">
+          Refresh
+        </BaseButton>
+        <base-button link to="/register" v-if="isVisibleButton">
+          Register
+        </base-button>
+      </div>
+      <div class="m-5" v-if="isLoading">
+        <ElLoading>
+        </ElLoading>
+      </div>
+      <ul v-else-if="hasCoaches">
+        <Coach
+          v-for="coach in filteredCoaches"
+          :key="coach.id"
+          :coach="coach"
+        ></Coach>
+      </ul>
+      <h3 v-else class="text-purple-500 font-semi-bold text-xl">No coaches found</h3>
+    </BaseCard>
+  </section>
 </template>
 
 <script>
-import { ref, reactive, computed } from 'vue';
-import { useStore } from 'vuex';
-import Coach from "@/components/coaches/Coach";
-import CoachFilter from '../coaches/CoachFilter'
+import {ElLoading} from 'element-plus'
+import Coach from '@/components/coaches/Coach'
+import CoachFilter from '@/components/coaches/CoachFilter'
+import BaseCard from '@/components/UI/BaseCard'
+import BaseButton from '@/components/UI/BaseButton'
 export default {
   components: {
+    ElLoading,
+    BaseButton,
+    BaseCard,
     Coach,
-    CoachFilter
+    CoachFilter,
   },
-  setup() {
-    const store = useStore();
-    const isLoading = ref(false);
-    const error = ref(null);
-    let activeFilters = reactive({
-      frontend: true,
-      backend: true,
-      career: true
-    });
-    loadCoaches();
-    const isLoggedIn = computed(() => store.getters.isAuthenticated);
-    const isCoach = computed(() => store.getters['coaches/isCoach']);
-    const hasCoaches = computed(() => !isLoading.value && store.getters['coaches/hasCoaches']);
-    const filteredCoaches = computed(() => {
-      const coaches = store.getters['coaches/coaches'];
-      return coaches.filter(coach => {
-        if (activeFilters.frontend && coach.areas.includes('frontend')) {
-          return true;
-        }
-        if (activeFilters.backend && coach.areas.includes('backend')) {
-          return true;
-        }
-        if (activeFilters.career && coach.areas.includes('career')) {
-          return true;
-        }
-        return false;
-      })
-    });
-    function setFilters(updatedFilters) {
-      Object.assign(activeFilters, updatedFilters);
-    }
-    function handleError() {
-      error.value = null;
-    }
-    async function loadCoaches(refresh = false) {
-      isLoading.value = true;
-      try {
-        await store.dispatch('coaches/loadCoaches', {forceRefresh: refresh});
-      } catch (err) {
-        error.value = err.message || 'Something went wrong!';
-      }
-      isLoading.value = false;
-    }
+  data() {
     return {
-      isLoading,
-      error,
-      hasCoaches,
-      isLoggedIn,
-      isCoach,
-      filteredCoaches,
-      setFilters,
-      handleError,
-      loadCoaches
+      filterValue: '',
+      isLoading: false,
     }
   },
-  // data() {
-  //   return {
-  //     isLoading: false,
-  //     error: null,
-  //     activeFilters: {
-  //       frontend: true,
-  //       backend: true,
-  //       career: true
-  //     }
-  //   }
-  // },
-  // computed: {
-  //   isLoggedIn() {
-  //     return this.$store.getters.isAuthenticated;
-  //   },
-  //   isCoach() {
-  //     return this.$store.getters['coaches/isCoach'];
-  //   },
-  //   filteredCoaches() {
-  //     const coaches = this.$store.getters['coaches/coaches']
-  //     console.log(coaches);
-  //     return coaches.filter(coach => {
-  //       if (this.activeFilters.frontend && coach.areas.includes('frontend')) {
-  //         return true;
-  //       }
-  //       if (this.activeFilters.backend && coach.areas.includes('backend')) {
-  //         return true;
-  //       }
-  //       if (this.activeFilters.career && coach.areas.includes('career')) {
-  //         return true;
-  //       }
-  //       return false;
-  //     })
-  //   },
-  //   hasCoaches() {
-  //     return !this.isLoading && this.$store.getters['coaches/hasCoaches']
-  //   }
-  // },
-  // created() {
-  //   this.loadCoaches();
-  // },
-  // methods: {
-  //   setFilters(updatedFilters) {
-  //     this.activeFilters = updatedFilters
-  //   },
-  //   async loadCoaches(refresh = false) {
-  //     this.isLoading = true;
-  //     try {
-  //       await this.$store.dispatch('coaches/loadCoaches', {forceRefresh: refresh});
-  //     } catch (error) {
-  //       this.error = error.message || 'Something went wrong!';
-  //     }
-  //     this.isLoading = false;
-  //   },
-  //   handleError() {
-  //     this.error = null;
-  //   }
-  // }
+  computed: {
+    filteredCoaches() {
+      return !this.filterValue ? this.$store.getters['coaches/coaches'] : this.$store.getters['coaches/coaches'].filter(coach => coach.areas.includes(this.filterValue));
+    },
+    hasCoaches() {
+      return !this.isLoading && this.$store.getters['coaches/hasCoaches'];
+    },
+    isCoach() {
+      return this.$store.getters['coaches/isCoach'];
+    },
+    isAuthorized() {
+      return this.$store.getters.isAuthorized;
+    },
+    isVisibleButton() {
+      return this.isAuthorized && !this.isCoach && !this.isLoading;
+    },
+  },
+  methods: {
+    setFilters(filterValue) {
+      this.filterValue = filterValue;
+    },
+    async loadCoaches() {
+      this.isLoading = true;
+      await this.$store.dispatch('coaches/loadCoaches');
+
+      this.isLoading = false;
+    },
+  },
+  created() {
+    this.loadCoaches();
+  }
 }
 </script>
-
-<style scoped>
-ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-.controls {
-  display: flex;
-  justify-content: space-between;
-}
-</style>

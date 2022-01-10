@@ -1,87 +1,62 @@
 <template>
-  <header class="bg-gray-900">
-    <nav>
-      <h1>
-        <router-link to="/">Find a Coach</router-link>
-      </h1>
-      <ul>
-        <li><router-link to="/coaches">All Coaches</router-link></li>
-        <li v-if="isLoggedIn"><router-link to="/requests">Requests</router-link></li>
-        <li v-else><router-link to="/auth">Login</router-link></li>
-        <li v-if="isLoggedIn"><base-button @click="logout">Logout</base-button></li>
-      </ul>
+  <header>
+    <nav class="bg-gray-900">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between h-20">
+          <div class="flex items-center">
+            <div class="flex-shrink-0 font-extrabold text-2xl text-blue-50">
+              <router-link to="/coaches">&#8981; Coach Finder</router-link>
+            </div>
+            <div class="ml-3 sm:ml-10 flex items-baseline space-x-2 sm:space-x-8" >
+              <router-link
+                to="/coaches"
+                class="text-white hover:bg-green-700 px-3 py-3 rounded-md text-sm font-medium"
+              >
+                Coaches
+              </router-link>
+              <router-link
+                to="/requests"
+                class="text-white hover:bg-green-700 px-3 py-3 rounded-md text-sm font-medium"
+                v-if="isAuthorized"
+              >
+                Requests
+              </router-link>
+              <router-link
+                to="/auth"
+                class="text-white hover:bg-green-700 px-3 py-3 rounded-md text-sm font-medium"
+                v-if="!isAuthorized"
+              >
+                Login &#10511;
+              </router-link>
+              <BaseButton
+                v-if="isAuthorized"
+                @click="logout"
+                class="w-1/3"
+              >
+                Logout &#10510;
+              </BaseButton>
+            </div>
+          </div>
+        </div>
+      </div>
     </nav>
   </header>
 </template>
 
 <script>
+import BaseButton from '@/components/UI/BaseButton'
 export default {
+  components: {BaseButton},
   computed: {
-    isLoggedIn() {
-      return this.$store.getters.isAuthenticated;
+    isAuthorized() {
+      return this.$store.getters.isAuthorized;
     }
   },
   methods: {
     logout() {
       this.$store.dispatch('logout');
-      this.$router.replace('/coaches');
+      this.$router.replace('/');
     }
   }
 }
 </script>
-
-
-<style scoped>
-header {
-  width: 100%;
-  height: 5rem;
-  /*background-color: #000000;*/
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-header a {
-  text-decoration: none;
-  color: #ffffff;
-  display: inline-block;
-  padding: 0.75rem 1.5rem;
-  border: 1px solid transparent;
-}
-a:active,
-a:hover,
-a.router-link-active {
-  border-radius: 6px;
-  border: 1px solid #ffffff;
-}
-h1 {
-  margin: 0;
-}
-h1 a {
-  letter-spacing: 4px;
-  color: white;
-  margin: 0;
-}
-h1 a:hover,
-h1 a:active,
-h1 a.router-link-active {
-  border-color: transparent;
-}
-header nav {
-  width: 90%;
-  margin: auto;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-header ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-li {
-  margin: 0 0.5rem;
-}
-</style>

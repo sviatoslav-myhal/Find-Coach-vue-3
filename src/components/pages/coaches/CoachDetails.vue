@@ -1,63 +1,69 @@
 <template>
-  <div>
-    <section>
-      <base-card>
-        <h2>
-          {{ fullName }}
-        </h2>
-        <h3>
-          ${{ rate }}/hour
-        </h3>
-      </base-card>
-    </section>
-    <section>
-      <base-card>
-        <header>
-          <h2>Interested? Reach out now!</h2>
-          <base-button link :to="contactLink">Contact</base-button>
-        </header>
-        <router-view></router-view>
-      </base-card>
-    </section>
-    <section>
-      <base-card>
-        <base-badge v-for="area in areas" :key="area" :type="area" :title="area"></base-badge>
-        <p> {{ description }} </p>
-      </base-card>
-    </section>
-  </div>
+  <section class="mx-5 sm:mx-14">
+    <BaseCard class="text-center gap-8 items-center p-5">
+      <div class="text-green-700 font-semibold text-xl">
+        <h2>Name: {{ fullName }}</h2>
+        <h3>Price: ${{ rate }}/hour</h3>
+      </div>
+      <router-view></router-view>
+      <div class="flex gap-1 sm:gap-5 sm:gap-10 w-2/4 justify-center">
+        <BaseBadge
+          v-for="area in areas"
+          :key="area"
+          :text="area"
+          class="text-green-500 w-full"
+        >
+        </BaseBadge>
+      </div>
+      <p class="font-medium p-5 text-green-700">
+        {{ description }}
+      </p>
+      <BaseButton link :to="contactLink">
+        Contact
+      </BaseButton>
+    </BaseCard>
+  </section>
 </template>
 
 <script>
-import { ref, computed } from 'vue';
-import { useStore } from 'vuex';
-import { useRoute } from 'vue-router';
+import BaseCard from '@/components/UI/BaseCard'
+import BaseBadge from '@/components/UI/BaseBadge'
+import BaseButton from '@/components/UI/BaseButton'
 export default {
-  props: ['id'],
-  setup(props) {
-    const store = useStore();
-    const route = useRoute();
-    const selectedCoach = ref(null);
-    (function getSelectedCoach() {
-      selectedCoach.value = store.getters['coaches/coaches']
-          .find((coach) => coach.id === props.id)
-    })();
-    const fullName = computed(() => selectedCoach.value.firstName + ' ' + selectedCoach.value.lastName);
-    const areas = computed(() => selectedCoach.value.areas);
-    const contactLink = computed(() => route.path + '/contact');
-    const rate = computed(() => selectedCoach.value.hourlyRate);
-    const description = computed(() => selectedCoach.value.description);
+  components: {BaseButton, BaseBadge, BaseCard},
+  props: {
+    id: {
+      type: String,
+      reqiured: true,
+    }
+  },
+  data() {
     return {
-      fullName,
-      areas,
-      contactLink,
-      rate,
-      description
+      selectedCoach: null,
+    }
+  },
+  created() {
+    this.selectedCoach
+      = this.$store.getters['coaches/coaches'].find(coach => (
+      coach.id === this.id
+    ));
+  },
+  computed: {
+    fullName() {
+      return this.selectedCoach.firstName + ' ' + this.selectedCoach.lastName;
+    },
+    contactLink() {
+      return this.id + '/contact';
+    },
+    areas() {
+      return this.selectedCoach.areas;
+    },
+    description() {
+      return this.selectedCoach.description;
+    },
+    rate() {
+      return this.selectedCoach.hourlyRate;
     }
   },
 }
 </script>
-
-<style scoped>
-
-</style>
